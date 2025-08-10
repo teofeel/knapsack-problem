@@ -1,7 +1,17 @@
 
 # load data
 def load_data(name):
-    pass
+    with open(name) as data:
+        capacity_s = data.readline().strip()
+        capacity = int(capacity_s.replace("capacity: ", ""))
+        items = data.readlines()
+        for i in range(len(items)):
+            line = items[i].strip().split(",")
+            line = [int(line[0]), int(line[1])]
+            items[i] = line
+        
+    return capacity, items
+        
 
 # generate initial population
 # population is consisted of 2+ chromosomes
@@ -12,4 +22,4 @@ def generate_initial_population(data, population_size, capcity):
     pass
 
 if __name__ == '__main__':
-    pass
+    print(load_data("data/data_knapsack01.txt"))
