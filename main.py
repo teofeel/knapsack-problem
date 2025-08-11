@@ -1,16 +1,19 @@
+import random 
+import math
+import ga.genetic_algorithm as ga
 
 # load data
 def load_data(name):
-    with open(name) as data:
-        capacity_s = data.readline().strip()
+    with open(name) as file:
+        capacity_s = file.readline().strip()
         capacity = int(capacity_s.replace("capacity: ", ""))
-        items = data.readlines()
-        for i in range(len(items)):
-            line = items[i].strip().split(",")
+        data = file.readlines()
+        for i in range(len(data)):
+            line = data[i].strip().split(",")
             line = [int(line[0]), int(line[1])]
-            items[i] = line
+            data[i] = line
         
-    return capacity, items
+    return capacity, data
         
 
 # generate initial population
@@ -18,8 +21,37 @@ def load_data(name):
 # number of genes in chromosome is equal to length of dataset
 # chromosome is consisted of randomly selected items from dataset whose total weight can fit in backpack
 # max population size is 2^n (where n is length of dataset)
-def generate_initial_population(data, population_size, capcity):
+def generate_initial_population(capacity, data, population_size):
+    population = []
+    for i in range(population_size):
+        while True:
+            chromosome = ""
+            chromosome_weight = 0
+            for j in range(len(data)):
+                bit = random.randint(0,1)
+                if bit == 1:
+                    chromosome_weight += data[j][0]
+                chromosome += str(bit)
+            if chromosome_weight <= capacity:
+                break
+        population.append(chromosome)
+        
+    return population
+
+def print_items(chromosome, score, data):
     pass
 
 if __name__ == '__main__':
-    print(load_data("data/data_knapsack01.txt"))
+    capacity, data = load_data("data/data_knapsack01.txt")
+    population = generate_initial_population(capacity, data, 5)
+    #p1, p2 = ga.select_parents(capacity, data, population)
+    #print(p1,p2)
+    #print(ga.crossover(5, population[p1[0]], population[p2[0]] ))
+
+    for i in range(10):
+        # 1. check criterium
+        # 2. if satisfied exit
+        # 3. if not, move to new population
+        population = ga.generate_population(capacity, data, population)
+
+    print(population)
