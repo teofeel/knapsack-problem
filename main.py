@@ -1,7 +1,7 @@
 import random 
 import math
 import ga.genetic_algorithm as ga
-
+from constants import POPULATION_SIZE, NUM_GENERATIONS
 # load data
 def load_data(name):
     with open(name) as file:
@@ -43,12 +43,12 @@ def print_items(chromosome, score, data):
 
 if __name__ == '__main__':
     capacity, data = load_data("data/data_knapsack01.txt")
-    population = generate_initial_population(capacity, data, 5)
+    population = generate_initial_population(capacity, data, POPULATION_SIZE)
     #p1, p2 = ga.select_parents(capacity, data, population)
     #print(p1,p2)
     #print(ga.crossover(5, population[p1[0]], population[p2[0]] ))
 
-    for i in range(10):
+    for i in range(NUM_GENERATIONS):
         # 1. check criterium
         # 2. if satisfied exit
         # 3. if not, move to new population

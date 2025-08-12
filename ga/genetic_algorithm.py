@@ -1,5 +1,6 @@
 import random
 import math
+from constants import POPULATION_SIZE, PROBABILITY_MUTATION
 # generate population
 def generate_population(capacity, data, population):
     # 3. if not select new parents
@@ -9,9 +10,9 @@ def generate_population(capacity, data, population):
 
     new_population = [parent1, parent2]
     # 4. crossover
-    new_population.extend(crossover(len(population), parent1, parent2))
+    new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
     # 5. mutate genes
-    new_population = mutate_population(new_population, 0.05)
+    new_population = mutate_population(new_population,PROBABILITY_MUTATION)
 
     return new_population
     
