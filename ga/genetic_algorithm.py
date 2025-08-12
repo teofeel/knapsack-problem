@@ -2,12 +2,20 @@ import random
 import math
 from constants import POPULATION_SIZE, PROBABILITY_MUTATION
 # generate population
-def generate_population(capacity, data, population):
-    # 3. if not select new parents
-    parent1_tuple, parent2_tuple = select_parents(capacity, data, population)
-    parent1 = population[parent1_tuple[0]]
-    parent2 = population[parent2_tuple[0]]
+#def generate_population(capacity, data, population):
+#    3. if not select new parents
+    #parent1_tuple, parent2_tuple = select_parents(capacity, data, population)
+    #parent1 = population[parent1_tuple[0]]
+    #parent2 = population[parent2_tuple[0]]
+#    new_population = [parent1, parent2]
+#    # 4. crossover
+#    new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
+#    # 5. mutate genes
+#    new_population = mutate_population(new_population,PROBABILITY_MUTATION)
+#
+#    return new_population
 
+def generate_population(parent1, parent2):
     new_population = [parent1, parent2]
     # 4. crossover
     new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
@@ -25,10 +33,10 @@ def fitness(capacity, data, chromosome):
         if chromosome[i] == "1":
             weight += data[i][0]
             value += data[i][1]
-    print(chromosome)
-    print(weight)
-    print(value)
-    print("\n")
+    #print(chromosome)
+    #print(weight)
+    #print(value)
+    #print("\n")
     if weight > capacity:
         return 0
     return int(value)
@@ -61,7 +69,7 @@ def crossover(population_size, parent1, parent2):
         split_index = random.randint(1, len(parent1)-2)
         coin = random.randint(0,1)
 
-        print(split_index, coin)
+        #print(split_index, coin)
 
         if coin==0:
             child = parent1[split_index:]
@@ -105,6 +113,36 @@ def mutate_population(population, probability):
     # if new population score is simillar to the last ones after x number of repetitions
     # if the number of generation is reached
     # if has optained optimal  
-def criteria(last_scores, gen_num, max_num_gen, optimal, population):
-    pass
+def check_last_scores(last_scores, expected_len, tolerance=0.0001):
+    if len(last_scores) < expected_len:
+        return False
+   
+    scores_percentage1 = []
+    scores_percentage2 = []
+
+    for i in range(len(last_scores)-1):
+        scores_percentage1.append(last_scores[i+1][0]/last_scores[i][0])
+        scores_percentage2.append(last_scores[i+1][1]/last_scores[i][1])
+
+        #print('optimal1', scores_percentage1, 'optimal2', scores_percentage2)
+
+    scores1_same = 0
+    scores2_same=0
+
+    for i in range(len(scores_percentage1)-1):
+        if abs(scores_percentage1[i] - scores_percentage1[i+1]) < tolerance:
+            scores1_same+=1
+
+        if abs(scores_percentage2[i] - scores_percentage2[i+1]) < tolerance:
+            scores2_same+=1
+    
+    if scores1_same == scores2_same:
+        return True
+    
+
+def criteria(last_scores, expected_len):
+    if check_last_scores(last_scores, expected_len):
+        return True
+    
+    return False
 

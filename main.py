@@ -1,7 +1,10 @@
 import random 
 import math
 import ga.genetic_algorithm as ga
-from constants import POPULATION_SIZE, NUM_GENERATIONS
+from collections import deque
+
+from constants import POPULATION_SIZE, NUM_GENERATIONS, LAST_SCORES_LEN
+
 # load data
 def load_data(name):
     with open(name) as file:
@@ -48,10 +51,36 @@ if __name__ == '__main__':
     #print(p1,p2)
     #print(ga.crossover(5, population[p1[0]], population[p2[0]] ))
 
+    last_scores = deque()
+    optimal = 0
     for i in range(NUM_GENERATIONS):
         # 1. check criterium
-        # 2. if satisfied exit
-        # 3. if not, move to new population
-        population = ga.generate_population(capacity, data, population)
+        parent1, parent2 = ga.select_parents(capacity, data, population)
 
-    print(population)
+        print(i)
+        # if parent score > optimal
+        if parent1[1] >= optimal:
+            optimal = parent1[1]
+
+        # add scores to the list
+        last_scores.append((parent1[1], parent2[1]))
+        if(len(last_scores)>LAST_SCORES_LEN):
+            last_scores.popleft()
+        
+        # 2. if satisfied exit
+        if ga.criteria(last_scores, LAST_SCORES_LEN):
+            break
+
+        # 3. if not, move to new population
+        #population = ga.generate_population(capacity, data, population)
+        parent1 = population[parent1[0]]
+        parent2 = population[parent2[0]]
+        population = ga.generate_population(parent1, parent2)
+
+        
+        #print(population)
+
+    parent1, parent2 = ga.select_parents(capacity, data, population)
+    print('parent1 score', parent1[1])
+    print('parent2 score', parent2[1])
+    #print(population)
