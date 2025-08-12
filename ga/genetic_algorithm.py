@@ -113,7 +113,7 @@ def mutate_population(population, probability):
     # if new population score is simillar to the last ones after x number of repetitions
     # if the number of generation is reached
     # if has optained optimal  
-def check_last_scores(last_scores, expected_len, tolerance=0.0001):
+def check_last_scores(last_scores, expected_len, tolerance=0.000001):
     if len(last_scores) < expected_len:
         return False
    
