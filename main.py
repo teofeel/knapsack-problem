@@ -41,8 +41,15 @@ def generate_initial_population(capacity, data, population_size):
         
     return population
 
-def print_items(chromosome, score, data):
-    pass
+def print_items(chromosome, data, score):
+    weight = 0
+    for i in range(len(chromosome)):
+        if chromosome[i] == '1':
+            print('Item:',data[i])
+            weight += data[i][0]
+
+    print('Total score:', score)
+    print('Total weight:', weight)
 
 if __name__ == '__main__':
     capacity, data = load_data("data/data_knapsack01.txt")
@@ -57,7 +64,7 @@ if __name__ == '__main__':
         # 1. check criterium
         parent1, parent2 = ga.select_parents(capacity, data, population)
 
-        print(i)
+        #print(i)
         # if parent score > optimal
         if parent1[1] >= optimal:
             optimal = parent1[1]
@@ -68,7 +75,7 @@ if __name__ == '__main__':
             last_scores.popleft()
         
         # 2. if satisfied exit
-        if ga.criteria(last_scores, LAST_SCORES_LEN):
+        if ga.criteria(last_scores, LAST_SCORES_LEN) or i==NUM_GENERATIONS:
             break
 
         # 3. if not, move to new population
@@ -80,7 +87,13 @@ if __name__ == '__main__':
         
         #print(population)
 
-    parent1, parent2 = ga.select_parents(capacity, data, population)
-    print('parent1 score', parent1[1])
-    print('parent2 score', parent2[1])
+    #parent1, parent2 = ga.select_parents(capacity, data, population)
+    #print('parent1 score', parent1[1])
+    #print('parent2 score', parent2[1])
+
+    chromosome1 = population[parent1[0]]
+    chromosome2 = population[parent2[0]]
+
+    print_items(chromosome1, data, parent1[1])
+
     #print(population)

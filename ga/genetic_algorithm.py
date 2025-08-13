@@ -44,6 +44,8 @@ def fitness(capacity, data, chromosome):
 
 # select parents function
 # pick two best if elitism choosen
+# parent[0] - index in population
+# parent[1] - score of chromosome
 def select_parents(capacity, data, population):
     max1 = (0, 0)
     max2 = (0, 0)
