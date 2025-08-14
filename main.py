@@ -54,9 +54,6 @@ def print_items(chromosome, data, score):
 if __name__ == '__main__':
     capacity, data = load_data("data/data_knapsack01.txt")
     population = generate_initial_population(capacity, data, POPULATION_SIZE)
-    #p1, p2 = ga.select_parents(capacity, data, population)
-    #print(p1,p2)
-    #print(ga.crossover(5, population[p1[0]], population[p2[0]] ))
 
     last_scores = deque()
     optimal = 0
@@ -79,21 +76,13 @@ if __name__ == '__main__':
             break
 
         # 3. if not, move to new population
-        #population = ga.generate_population(capacity, data, population)
         parent1 = population[parent1[0]]
         parent2 = population[parent2[0]]
         population = ga.generate_population(parent1, parent2)
 
-        
-        #print(population)
-
-    #parent1, parent2 = ga.select_parents(capacity, data, population)
-    #print('parent1 score', parent1[1])
-    #print('parent2 score', parent2[1])
+    
 
     chromosome1 = population[parent1[0]]
     chromosome2 = population[parent2[0]]
 
     print_items(chromosome1, data, parent1[1])
-
-    #print(population)
