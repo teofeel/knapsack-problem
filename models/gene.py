@@ -4,6 +4,6 @@ class Gene:
         self.value = value
         self.added = added
 
-
+    
 
     

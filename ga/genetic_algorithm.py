@@ -1,26 +1,17 @@
 import random
 import math
-from constants import POPULATION_SIZE, PROBABILITY_MUTATION
-# generate population
-#def generate_population(capacity, data, population):
-#    3. if not select new parents
-    #parent1_tuple, parent2_tuple = select_parents(capacity, data, population)
-    #parent1 = population[parent1_tuple[0]]
-    #parent2 = population[parent2_tuple[0]]
-#    new_population = [parent1, parent2]
-#    # 4. crossover
-#    new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
-#    # 5. mutate genes
-#    new_population = mutate_population(new_population,PROBABILITY_MUTATION)
-#
-#    return new_population
+import copy
 
+from constants import POPULATION_SIZE, PROBABILITY_MUTATION
+from models.chromosome import Chromosome
+
+# generate population
 def generate_population(parent1, parent2):
     new_population = [parent1, parent2]
     # 4. crossover
     new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
     # 5. mutate genes
-    new_population = mutate_population(new_population,PROBABILITY_MUTATION)
+    new_population = mutate_population(new_population, PROBABILITY_MUTATION)
 
     return new_population
     
@@ -29,13 +20,13 @@ def generate_population(parent1, parent2):
 def fitness(capacity, data, chromosome):
     weight = 0
     value = 0
-    for i in range(len(chromosome)):
-        if chromosome[i] == "1":
-            weight += data[i][0]
-            value += data[i][1]
+    for i in range(len(chromosome.genes)):
+        if chromosome.genes[i].added == 1:
+            weight += chromosome.genes[i].weight
+            value += chromosome.genes[i].value
     #print(chromosome)
-    #print(weight)
-    #print(value)
+    #print('weight',weight)
+    #print('value',value)
     #print("\n")
     if weight > capacity:
         return 0
@@ -68,21 +59,19 @@ def crossover(population_size, parent1, parent2):
     children = []
 
     for _ in range(population_size-2):
-        split_index = random.randint(1, len(parent1)-2)
+        split_index = random.randint(1, len(parent1.genes)-2)
         coin = random.randint(0,1)
 
-        #print(split_index, coin)
-
         if coin==0:
-            child = parent1[split_index:]
-            child += (parent2[:split_index])
+            child_genes = copy.deepcopy(parent1.genes[split_index:])
+            child_genes += copy.deepcopy(parent2.genes[:split_index])
         else:
-            child = parent2[split_index:]
-            child += (parent1[:split_index])
+            child_genes = copy.deepcopy(parent2.genes[split_index:])
+            child_genes += copy.deepcopy(parent1.genes[:split_index])
         
+        child = Chromosome(child_genes)
 
         children.append(child)
-
 
     return children
 
@@ -93,11 +82,9 @@ def crossover(population_size, parent1, parent2):
     # choose 1-2 genes of offspring and then move to next one
     # assign a random probability to every gene that determines if the gene will be mutated. Roll a dice for every gene and mutate it if lands within the probability
 def mutate_chromosome(chromosome):
-    index = random.randint(0, len(chromosome) - 1)
-    if chromosome[index] == "0":
-        chromosome = chromosome[:index]+"1"+chromosome[index+1:]
-    else:
-        chromosome = chromosome[:index]+"0"+chromosome[index+1:]
+    index = random.randint(0, len(chromosome.genes) - 1)
+    gene = chromosome.genes[index]
+    gene.added = 1 - gene.added 
     return chromosome
 
 
