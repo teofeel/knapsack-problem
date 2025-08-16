@@ -66,13 +66,14 @@ def crossover(population_size, parent1, parent2):
         coin = random.randint(0,1)
 
         if coin==0:
-            child_genes = parent1.genes[split_index:].copy()
-            child_genes += parent2.genes[:split_index].copy()
+            child_genes = parent1.genes[split_index:]
+            child_genes += parent2.genes[:split_index]
         else:
-            child_genes = parent2.genes[split_index:].copy()
-            child_genes += parent1.genes[:split_index].copy()
+            child_genes = parent2.genes[split_index:]
+            child_genes += parent1.genes[:split_index]
         
         child = Chromosome(child_genes)
+        child = child.copy()
 
         children.append(child)
 
