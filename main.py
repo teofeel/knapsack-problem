@@ -1,6 +1,7 @@
 import random 
 import math
 import copy
+import time
 import ga.genetic_algorithm as ga
 from collections import deque
 
@@ -62,6 +63,7 @@ def print_items(chromosome, data, score):
     print('Total weight:', weight)
 
 if __name__ == '__main__':
+    begin = time.time()
     capacity, data = load_data("data/data_knapsack01.txt")
     population = generate_initial_population(capacity, data, POPULATION_SIZE)
 
@@ -70,8 +72,10 @@ if __name__ == '__main__':
     for i in range(NUM_GENERATIONS):
         # 1. check criterium
         parent1, parent2 = ga.select_parents(capacity, data, population)
-        #print(parent1, parent2)
-
+        print(parent1, parent2)
+        assert parent1[1] > 0 
+        assert parent2[1] > 0
+        
 
         # if parent score > optimal
         if parent1[1] >= optimal:
@@ -87,8 +91,8 @@ if __name__ == '__main__':
             break
 
         # 3. if not, move to new population
-        chromosome1 = copy.deepcopy(population[parent1[0]])
-        chromosome2 = copy.deepcopy(population[parent2[0]])
+        chromosome1 = population[parent1[0]].copy()
+        chromosome2 = population[parent2[0]].copy()
         del population
         population = ga.generate_population(chromosome1, chromosome2)
 
@@ -97,3 +101,6 @@ if __name__ == '__main__':
         chromosome2 = population[parent2[0]]
 
     print_items(chromosome1, data, parent1[1])
+
+    end = time.time()
+    print(end-begin)

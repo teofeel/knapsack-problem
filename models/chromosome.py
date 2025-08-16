@@ -1,3 +1,5 @@
+from models.gene import Gene
+
 class Chromosome:
     def __init__(self, genes):
         self.genes = genes
@@ -12,4 +14,7 @@ class Chromosome:
         for g in self.genes:
             self.weight += g.weight
 
+    def copy(self):
+        new_genes = [Gene(g.weight, g.value, g.added) for g in self.genes]
+        return Chromosome(new_genes)
     

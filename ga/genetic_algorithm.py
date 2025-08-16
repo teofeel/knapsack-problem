@@ -42,12 +42,15 @@ def select_parents(capacity, data, population):
     max2 = (0, 0)
     for i in range(len(population)):
         score = fitness(capacity, data, population[i])
+        print(score)
         if max1[1] < score:
             tmp = max1
             max1 = (i, score)
             max2 = tmp
         elif max2[1] < score:
             max2 = (i, score) 
+
+    print(max1, max2)
     return max1, max2
 
 # crossover function
@@ -63,11 +66,11 @@ def crossover(population_size, parent1, parent2):
         coin = random.randint(0,1)
 
         if coin==0:
-            child_genes = copy.deepcopy(parent1.genes[split_index:])
-            child_genes += copy.deepcopy(parent2.genes[:split_index])
+            child_genes = parent1.genes[split_index:].copy()
+            child_genes += parent2.genes[:split_index].copy()
         else:
-            child_genes = copy.deepcopy(parent2.genes[split_index:])
-            child_genes += copy.deepcopy(parent1.genes[:split_index])
+            child_genes = parent2.genes[split_index:].copy()
+            child_genes += parent1.genes[:split_index].copy()
         
         child = Chromosome(child_genes)
 
@@ -85,14 +88,14 @@ def mutate_chromosome(chromosome):
     index = random.randint(0, len(chromosome.genes) - 1)
     gene = chromosome.genes[index]
     gene.added = 1 - gene.added 
-    return chromosome
+
 
 
 def mutate_population(population, probability):
     n = math.ceil(len(population) * probability)
     for i in range(n):
         index = random.randint(2, len(population) - 1)
-        population[index] = mutate_chromosome(population[index])
+        mutate_chromosome(population[index])
 
     return population
 
