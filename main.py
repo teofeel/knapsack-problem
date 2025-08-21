@@ -75,7 +75,7 @@ if __name__ == '__main__':
         print(parent1, parent2)
         assert parent1[1] > 0 
         assert parent2[1] > 0
-        
+    
 
         # if parent score > optimal
         if parent1[1] >= optimal:

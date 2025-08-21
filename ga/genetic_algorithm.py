@@ -4,7 +4,7 @@ import copy
 
 from constants import POPULATION_SIZE, PROBABILITY_MUTATION
 from models.chromosome import Chromosome
-
+from models.gene import Gene
 # generate population
 def generate_population(parent1, parent2):
     new_population = [parent1, parent2]
@@ -21,7 +21,7 @@ def fitness(capacity, data, chromosome):
     weight = 0
     value = 0
     for i in range(len(chromosome.genes)):
-        if chromosome.genes[i].added == 1:
+        if chromosome.genes[i].added:
             weight += chromosome.genes[i].weight
             value += chromosome.genes[i].value
     #print(chromosome)
@@ -42,7 +42,6 @@ def select_parents(capacity, data, population):
     max2 = (0, 0)
     for i in range(len(population)):
         score = fitness(capacity, data, population[i])
-        print(score)
         if max1[1] < score:
             tmp = max1
             max1 = (i, score)
@@ -50,7 +49,6 @@ def select_parents(capacity, data, population):
         elif max2[1] < score:
             max2 = (i, score) 
 
-    print(max1, max2)
     return max1, max2
 
 # crossover function
@@ -65,15 +63,14 @@ def crossover(population_size, parent1, parent2):
         split_index = random.randint(1, len(parent1.genes)-2)
         coin = random.randint(0,1)
 
-        if coin==0:
-            child_genes = parent1.genes[split_index:]
-            child_genes += parent2.genes[:split_index]
+        if coin == 0:
+            child_genes = [Gene(g.weight, g.value, g.added) for g in parent1.genes[:split_index]]
+            child_genes += [Gene(g.weight, g.value, g.added) for g in parent2.genes[split_index:]]
         else:
-            child_genes = parent2.genes[split_index:]
-            child_genes += parent1.genes[:split_index]
+            child_genes = [Gene(g.weight, g.value, g.added) for g in parent2.genes[:split_index]]
+            child_genes += [Gene(g.weight, g.value, g.added) for g in parent1.genes[split_index:]]
         
         child = Chromosome(child_genes)
-        child = child.copy()
 
         children.append(child)
 
@@ -97,6 +94,7 @@ def mutate_population(population, probability):
     for i in range(n):
         index = random.randint(2, len(population) - 1)
         mutate_chromosome(population[index])
+        population[index].calculate_weight()
 
     return population
 
