@@ -1,6 +1,6 @@
 import random
 import math
-from constants import POPULATION_SIZE, PROBABILITY_MUTATION
+# from constants import POPULATION_SIZE, PROBABILITY_MUTATION
 # generate population
 #def generate_population(capacity, data, population):
 #    3. if not select new parents
@@ -15,12 +15,12 @@ from constants import POPULATION_SIZE, PROBABILITY_MUTATION
 #
 #    return new_population
 
-def generate_population(parent1, parent2):
+def generate_population(parent1, parent2, POPULATION_SIZE, MUTATION_PROBABILITY):
     new_population = [parent1, parent2]
     # 4. crossover
     new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
     # 5. mutate genes
-    new_population = mutate_population(new_population,PROBABILITY_MUTATION)
+    new_population = mutate_population(new_population,MUTATION_PROBABILITY)
 
     return new_population
     
@@ -67,22 +67,22 @@ def select_parents(capacity, data, population):
 def crossover(population_size, parent1, parent2):
     children = []
 
-    for _ in range(population_size-2):
+    while len(children) < population_size - 2:
         split_index = random.randint(1, len(parent1)-2)
-        coin = random.randint(0,1)
+        # coin = random.randint(0,1)
 
-        #print(split_index, coin)
-
-        if coin==0:
-            child = parent1[split_index:]
-            child += (parent2[:split_index])
-        else:
-            child = parent2[split_index:]
-            child += (parent1[:split_index])
+        # print(split_index)
         
-
-        children.append(child)
-
+        child1 = parent1[split_index:]
+        child1 += (parent2[:split_index])
+        children.append(child1)
+        
+        if len(children) == population_size - 2:
+            break
+    
+        child2 = parent2[split_index:]
+        child2 += (parent1[:split_index])
+        children.append(child2)
 
     return children
 
