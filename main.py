@@ -27,19 +27,16 @@ def load_data(name):
 # max population size is 2^n (where n is length of dataset)
 def generate_initial_population(capacity, data, population_size):
     population = []
-    for i in range(population_size):
-        while True:
-            chromosome = ""
-            chromosome_weight = 0
-            for j in range(len(data)):
-                bit = random.randint(0,1)
-                if bit == 1:
-                    chromosome_weight += data[j][0]
-                chromosome += str(bit)
-            if chromosome_weight <= capacity:
-                break
-        population.append(chromosome)
-        
+    while len(population) < population_size:
+        chromosome = ""
+        chromosome_weight = 0
+        for j in range(len(data)):
+            bit = random.randint(0,1)
+            if bit == 1:
+                chromosome_weight += data[j][0]
+            chromosome += str(bit)
+        if chromosome_weight <= capacity and chromosome not in population:
+            population.append(chromosome)      
     return population
 
 def calc_weight(chromosome, data, capacity):
