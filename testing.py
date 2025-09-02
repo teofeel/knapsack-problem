@@ -7,7 +7,7 @@ def average(pop_size, num_gens, mutation_prob):
     # print("Mutation probability", mutation_prob)
     max_score = 0
     # total_gens = 0
-    for i in range(50):
+    for i in range(1):
         score, weight_perc, gens = main.call_main(pop_size, num_gens, 30, mutation_prob)
         if score > max_score:
             max_score = score
@@ -21,8 +21,8 @@ def average(pop_size, num_gens, mutation_prob):
 
 def best():
     sizes = [200]
-    generations = [150]
-    mutations = [0.05]
+    generations = [200]
+    mutations = [0.2]
     best = [0, 0, 0, 0]
     for i in range(1):
         for j in range(1):

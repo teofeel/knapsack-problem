@@ -18,9 +18,9 @@ import math
 def generate_population(parent1, parent2, POPULATION_SIZE, MUTATION_PROBABILITY):
     new_population = [parent1, parent2]
     # 4. crossover
-    new_population.extend(crossover(POPULATION_SIZE, parent1, parent2))
+    new_population.extend(crossover(POPULATION_SIZE, parent1, parent2, MUTATION_PROBABILITY))
     # 5. mutate genes
-    new_population = mutate_population(new_population,MUTATION_PROBABILITY)
+    # new_population = mutate_population(new_population,MUTATION_PROBABILITY)
 
     return new_population
     
@@ -64,27 +64,28 @@ def select_parents(capacity, data, population):
 # add parent1's genes up to that point to the new chromosome
 # add parent2's genes from that point to the new chromosome
 # offspring is created
-def crossover(population_size, parent1, parent2):
+def crossover(population_size, parent1, parent2, probability):
     children = []
 
     while len(children) < population_size - 2:
-        split_index = random.randint(1, len(parent1)-2)
+        split_index = random.randint(1, len(parent1)-1)
         # coin = random.randint(0,1)
 
         # print(split_index)
         
-        child1 = parent1[split_index:]
-        child1 += (parent2[:split_index])
+        child1 = parent1[:split_index]
+        child1 += (parent2[split_index:])
         children.append(child1)
         
         if len(children) == population_size - 2:
             break
     
-        child2 = parent2[split_index:]
-        child2 += (parent1[:split_index])
+        child2 = parent2[:split_index]
+        child2 += (parent1[split_index:])
         children.append(child2)
+    mutated_children = mutate_population(children, probability)
 
-    return children
+    return mutated_children
 
 
 # mutation function
