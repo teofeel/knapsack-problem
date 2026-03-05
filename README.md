@@ -1,6 +1,6 @@
 ## Genetic Algorithm for the 0/1 Knapsack Problem
 
-This project implements a Genetic Algorithm (GA) to solve the classic 0/1 Knapsack Problem. The goal is to select a subset of items with given weights and values to maximize the total value without exceeding the knapsack's weight capacity
+This project implements a Genetic Algorithm (GA) to solve the classic 0/1 Knapsack Problem. The goal is to select a subset of items with given weights and values to maximize the total value without exceeding the knapsack's weight capacity. Unlike the brute-force approach—which has a complexity of $O(2^n)$—this Genetic Algorithm explores the search space efficiently to find "good enough" or optimal solutions in a fraction of the time
 
 ## Features
 - Initial Population Generation: Creates a valid initial population where every individual (chromosome) respects the weight constraint
